@@ -5,6 +5,7 @@ from PIL import Image
 import google.generativeai as genai
 import json
 api =st.secrets["GOOGLE_API_KEY"]
+
 genai.configure(api_key=api)
 
 def get_gemini_repsonse(input,img):
@@ -18,10 +19,10 @@ def get_geminipro_repsonse(input):
     response=model.generate_content(input)
     return response.text
 input_promt ="""
-Think of yourself as a zookeeper; you are an authority when it comes to imparting knowledge about reptiles and other animals.
-You have to make an educated estimate based on the image: Is it an animal? Please advise me on the animal. find species that are comparable.
-You must state, "I am not able to recognize it," if you are unable to identify any animal or estimate what it is.
-It is not necessary to include information about anything other than animals, such as people, equipment, etc.
+Concider yourself as a zookeeper; you are an authority when it comes to imparting knowledge about reptiles and other animals.
+You have to make an educated estimate based on the image: Is it an animal?if it is a real animal photo advise me on the animal. find species that are comparable.
+if imaage not contain animal ,response most will be "Image not contain any animal images".
+if image is other than animals, such as people, equipment dont provide information about image.
 If you come across more than one animal, you must provide information about each one using below format.
 It is up to you to speculate as to the animal's specifics. which species it is; you have to make a guess in addition to noting its generic term, such as snake.
 
@@ -45,27 +46,37 @@ uploaded_file = st.file_uploader("Upload animal image...",type=["png","jpg"])
 # output = pipe(text)
 # st.audio(output["audio"], sample_rate=output["sampling_rate"])
 res ={"Name":""}
-
+response =""
+visibility =True
 if uploaded_file is not None: 
     img = Image.open(uploaded_file)        
     response =get_gemini_repsonse(input_promt,img)
     if response:
-        res = json.loads(response)
-        st.image(img, caption=res["image description"], width=400, use_column_width=None, clamp=False, channels="RGB", output_format="auto")
-        st.subheader(res["detailed summary"])
+        try:
+            res = json.loads(response)
+            st.image(img, caption=res["image description"], width=400, use_column_width=None, clamp=False, channels="RGB", output_format="auto")
+            st.subheader(res['Name'], divider='rainbow')
+            st.subheader(res["detailed summary"])
+        except:
+            st.subheader("image may not contain any animal image")
+            visibility =False
         # print(res['Name'])
-od=st.text_area("Other details you want to know: ",key="input")
-submit = st.button("search🙃")
-input_promt1 =f"""
-Think of yourself as a zookeeper; you are an authority when it comes to imparting knowledge about animals.
-You have to make a sort estimate based on animal name name and task
-name : {res['Name']}
-task : {od}
-"""
-if od is not None and submit:
-    res = get_geminipro_repsonse(input_promt1)
-    st.subheader(res)
-
+try:
+    if response !="" and visibility:
+        od=st.text_area("Other details you want to know: ",key="input")
+        submit = st.button("search🙃")
+        input_promt1 =f"""
+        Think of yourself as a zookeeper; you are an authority when it comes to imparting knowledge about animals.
+        You have to make a sort estimate based on animal name name and task
+        name : {res['Name']}
+        task : {od}
+        """
+    
+        if od is not None and submit:
+            res = get_geminipro_repsonse(input_promt1)
+            st.subheader(res)
+except:
+    st.subheader("image not contain any animal image")
 
         
     
