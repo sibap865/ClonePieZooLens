@@ -4,7 +4,7 @@ import streamlit as st
 from PIL import Image
 import google.generativeai as genai
 import json
-api =os.environ["GOOGLE_API_KEY"]
+api =st.secrets["GOOGLE_API_KEY"]
 genai.configure(api_key=api)
 
 def get_gemini_repsonse(input,img):
@@ -50,8 +50,9 @@ if uploaded_file is not None:
     img = Image.open(uploaded_file)        
     response =get_gemini_repsonse(input_promt,img)
     if response:
-        st.subheader(response)
         res = json.loads(response)
+        st.image(img, caption=res["image description"], width=400, use_column_width=None, clamp=False, channels="RGB", output_format="auto")
+        st.subheader(res["detailed summary"])
         # print(res['Name'])
 od=st.text_area("Other details you want to know: ",key="input")
 submit = st.button("search🙃")
