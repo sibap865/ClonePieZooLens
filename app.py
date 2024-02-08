@@ -4,8 +4,8 @@ import streamlit as st
 from PIL import Image
 import google.generativeai as genai
 import json
-api =st.secrets["GOOGLE_API_KEY"]
-
+# api =st.secrets["GOOGLE_API_KEY"]
+api ="AIzaSyDeUEvKEdpwwRnDXDFS12HOOpnZR1-xvyM"
 genai.configure(api_key=api)
 
 def get_gemini_repsonse(input,img):
@@ -20,9 +20,9 @@ def get_geminipro_repsonse(input):
     return response.text
 input_promt ="""
 Concider yourself as a zookeeper; you are an authority when it comes to imparting knowledge about reptiles and other animals.
-You have to make an educated estimate based on the image: Is it an animal?if it is a real animal photo advise me on the animal. find species that are comparable.
-if imaage not contain animal ,response most will be "Image not contain any animal images".
-if image is other than animals, such as people, equipment dont provide information about image.
+You have to make an educated estimate based on the image: Is it a real animal? if it is a real animal image advise me on the animal. find species that are comparable.
+if image not contain real animal ,response most be "Image not contain any animal images".
+if image not conatain real animals image, such as people, equipment  and ai generated don't provide information about image.
 If you come across more than one animal, you must provide information about each one using below format.
 It is up to you to speculate as to the animal's specifics. which species it is; you have to make a guess in addition to noting its generic term, such as snake.
 
