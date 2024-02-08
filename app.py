@@ -1,14 +1,11 @@
-from dotenv import load_dotenv
-
-load_dotenv()
 
 import os
 import streamlit as st
 from PIL import Image
 import google.generativeai as genai
 import json
-
-genai.configure(api_key=os.getenv("GOOGLE_API_KEY"))
+api =os.environ["GOOGLE_API_KEY"]
+genai.configure(api_key=api)
 
 def get_gemini_repsonse(input,img):
     model=genai.GenerativeModel('gemini-pro-vision')
