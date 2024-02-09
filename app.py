@@ -4,8 +4,7 @@ import streamlit as st
 from PIL import Image
 import google.generativeai as genai
 import json
-# api =st.secrets["GOOGLE_API_KEY"]
-api ="AIzaSyDeUEvKEdpwwRnDXDFS12HOOpnZR1-xvyM"
+api =st.secrets["GOOGLE_API_KEY"]
 genai.configure(api_key=api)
 
 def get_gemini_repsonse(input,img):
