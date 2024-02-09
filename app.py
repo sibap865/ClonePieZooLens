@@ -55,6 +55,9 @@ if uploaded_file is not None:
             res = json.loads(response)
             st.image(img, caption=res["image description"], width=400, use_column_width=None, clamp=False, channels="RGB", output_format="auto")
             st.subheader(res['Name'], divider='rainbow')
+            st.subheader("Related Species :")
+            st.subheader(res['related Species'])
+            st.subheader("Detailed Summary :")
             st.subheader(res["detailed summary"])
         except:
             st.subheader("image may not contain any animal image")
